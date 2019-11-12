@@ -1,5 +1,19 @@
+from __future__ import unicode_literals
 from django.db import models
 
+class ShowManager(models.Manager):
+    
+    def basic_validator(self, postData):
+        
+        errors = {}
+        # add keys to erros dictionary for each invalid field
+
+        if len(postData['title']) < 2:
+            errors['title'] = "Movie title is too short, need to be over 2 characters long"
+        if len(postData['network']) < 2:
+            errors['network'] = 'network name is too short, needs to be over 2 charaters long'
+        return errors
+    
 # title, network, releasedate
 class Show(models.Model):
 
@@ -9,11 +23,10 @@ class Show(models.Model):
     desc = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)    
+    objects = ShowManager()
 
     def __repr__(self):
         return f'The title is: {self.title} and id: {self.id}' 
-
-
 
 
 # Inside your app's models.py file

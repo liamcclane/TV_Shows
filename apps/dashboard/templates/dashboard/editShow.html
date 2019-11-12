@@ -20,6 +20,15 @@
                 <h3 class="col">We are editing : <span>{{ show.title }}</span></h3>
                 <h5 class="col2- text-right mr-3">Show ID: {{ show.id }}</h5>
             </div>
+
+            {% if messages %}
+            <ul class="messages">
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{ message.tags }} text-danger" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+            </ul>
+            {% endif %}
+
             <form class="form-group" action="/shows/{{ show.id }}/updateShow" name="" method="POST">
                 {% csrf_token %}
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from apps.dashboard.models import *
-
+from django.contrib import messages
 
 def index(request):
 
@@ -32,15 +32,28 @@ def createShow(request, methods = "POST"):
 
     print('this is what is in POST from the submission form',request.POST)
 
-    if request.POST['title'] is not '':
+    errors  = Show.objects.basic_validator(request.POST)
+        # check if the errors dictionary has anything in it
+
+    if len(errors) > 0:
+        # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
+
+        for key, value in errors.items():
+            messages.error(request, value)
+        # redirect the user back to the form to fix the errors
+
+        return redirect('/shows/createPG')
+    else:
+        # if the errors object is empty, that means there were no errors!
+        # retrieve the show to be created and save
+
         Show.objects.create(title = request.POST['title'],network = request.POST['network'], releaseDate = request.POST['date'],desc = request.POST['desc'])
 
-    newestShow = Show.objects.last()
+        newestShow = Show.objects.last()
+        show_id = newestShow.id
 
-    show_id = newestShow.id
-
-    print('*'*40)
-    return redirect(f'/shows/{show_id}')
+        print('*'*40)
+        return redirect(f'/shows/{show_id}')
 
 
 
@@ -75,18 +88,32 @@ def updateShow(request, show_id, methods = 'POST'):
 
     print('this is the updated information that is getting passed to us by the form post')
     
-    changeShow = Show.objects.get(id=show_id)
+    errors  = Show.objects.basic_validator(request.POST)
+        # check if the errors dictionary has anything in it
 
-    changeShow.title = request.POST['title']
-    changeShow.desc = request.POST['desc']
-    changeShow.network = request.POST['network']
+    if len(errors) > 0:
+        # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
 
-    # changeShow.updated_at = DateTimeField(auto_now=True)
-    
-    changeShow.save()
+        for key, value in errors.items():
+            messages.error(request, value)
+        # redirect the user back to the form to fix the errors
+
+        return redirect(f'/shows/{show_id}/edit')
+    else:
+        # if the errors object is empty, that means there were no errors!
+        # retrieve the show to be created and save
+        changeShow = Show.objects.get(id=show_id)
+
+        changeShow.title = request.POST['title']
+        changeShow.desc = request.POST['desc']
+        changeShow.network = request.POST['network']
+
+        # changeShow.updated_at = DateTimeField(auto_now=True)
+        changeShow.save()
+
+        return redirect(f'/shows/{show_id}')
 
 
-    return redirect(f'/shows/{show_id}')
 
 
 

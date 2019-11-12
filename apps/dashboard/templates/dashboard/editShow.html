@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/master.css' %}">    
+    <title>All the Shows</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-10">
+            <a href="/shows" class="btn btn-outline-primary">Go back</a>
+            <div class="row">
+                <h3 class="col">We are editing : <span>{{ show.title }}</span></h3>
+                <h5 class="col2- text-right mr-3">Show ID: {{ show.id }}</h5>
+            </div>
+            <form class="form-group" action="/shows/{{ show.id }}/updateShow" name="" method="POST">
+                {% csrf_token %}
+
+                <p class="font-weight-bold">Title</p>
+                <input class="form-control" type="text" name='title' value="{{ show.title }}">
+                <p class="font-weight-bold">Network</p>
+                <input class="form-control" type="text" name='network' value="{{ show.network }}">
+                <p class="font-weight-bold">Description</p>
+                <textarea class="form-control" name="desc" cols="30" rows="10">{{ show.desc }}</textarea>
+
+
+                <button class="btn btn-secondary mt-3" value="today" name="updated_at">Update</button>
+            </form>
+
+
+        </div>
+    </div>
+</body>
+
+</html>

@@ -28,14 +28,19 @@
             {% endif %}
             <form class="form-group" action="/shows/createShow" method="POST">
                 {% csrf_token %}
+                
                 <p class="font-weight-bold">Title</p>
                 <input class="form-control" type="text" name="title">
+                
                 <p class="font-weight-bold">Network</p>
                 <input class="form-control" type="text" name='network'>
+                
                 <p class="font-weight-bold">Release Date</p>
                 <input type="date" name="date">
+                
                 <p class="font-weight-bold">Description</p>
                 <textarea class="form-control" name="desc" cols="30" rows="10"></textarea>
+                
                 <input class="btn btn-outline-secondary m-2" type="submit" value="add">
             </form>
 

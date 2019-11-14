@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from apps.dashboard.models import *
 from django.contrib import messages
 
+
 def index(request):
 
     # get all the shows from the DB and pass it back into the HTML template
     context = {
-        'shows' : Show.objects.all(),
+        'shows': Show.objects.all(),
 
     }
 
@@ -16,24 +17,25 @@ def index(request):
 def createPg(request):
     return render(request, 'dashboard/createShow.html')
 
-def showDetails(request,show_id):
+
+def showDetails(request, show_id):
 
     print('*************inside the showDetials function***************')
 
     context = {
-        'show' : Show.objects.get(id = show_id)
+        'show': Show.objects.get(id=show_id)
     }
 
-    return render(request, 'dashboard/showDetails.html',context)
+    return render(request, 'dashboard/showDetails.html', context)
 
 
-def createShow(request, methods = "POST"):
+def createShow(request, methods="POST"):
     print('****************inside the createShow function**********')
 
-    print('this is what is in POST from the submission form',request.POST)
+    print('this is what is in POST from the submission form', request.POST)
 
-    errors  = Show.objects.basic_validator(request.POST)
-        # check if the errors dictionary has anything in it
+    errors = Show.objects.basic_validator(request.POST)
+    # check if the errors dictionary has anything in it
 
     if len(errors) > 0:
         # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
@@ -47,14 +49,14 @@ def createShow(request, methods = "POST"):
         # if the errors object is empty, that means there were no errors!
         # retrieve the show to be created and save
 
-        Show.objects.create(title = request.POST['title'],network = request.POST['network'], releaseDate = request.POST['date'],desc = request.POST['desc'])
+        Show.objects.create(title=request.POST['title'], network=request.POST['network'],
+                            releaseDate=request.POST['date'], desc=request.POST['desc'])
 
         newestShow = Show.objects.last()
         show_id = newestShow.id
 
         print('*'*40)
         return redirect(f'/shows/{show_id}')
-
 
 
 def deleteShow(request, show_id):
@@ -75,21 +77,21 @@ def deleteShow(request, show_id):
 def editShow(request, show_id):
 
     context = {
-        'show' : Show.objects.get(id = show_id)
+        'show': Show.objects.get(id=show_id)
     }
-    
+
     # this route displays the edit pg
-    return render(request,'dashboard/editShow.html',context)
+    return render(request, 'dashboard/editShow.html', context)
 
 
-def updateShow(request, show_id, methods = 'POST'):
+def updateShow(request, show_id, methods='POST'):
     # this route actually updates the show after the button is clicked
     print('*-'*15)
 
     print('this is the updated information that is getting passed to us by the form post')
-    
-    errors  = Show.objects.basic_validator(request.POST)
-        # check if the errors dictionary has anything in it
+
+    errors = Show.objects.basic_validator(request.POST)
+    # check if the errors dictionary has anything in it
 
     if len(errors) > 0:
         # if the errors dictionary contains anything, loop through each key-value pair and make a flash message
@@ -114,17 +116,14 @@ def updateShow(request, show_id, methods = 'POST'):
         return redirect(f'/shows/{show_id}')
 
 
-
-
-
 # def update(request, id):
-    
-#     # pass the post data to the method we wrote and save the response in a variable 
+
+#     # pass the post data to the method we wrote and save the response in a variable
 #     # called errors
 #     errors = Blog.objects.basic_validator(request.POST)
 #         # check if the errors dictionary has anything in it
 #     if len(errors) > 0:
-#         # if the errors dictionary contains anything, loop through each 
+#         # if the errors dictionary contains anything, loop through each
 #         # key-value pair and make a flash message
 #         for key, value in errors.items():
 #             messages.error(request, value)
@@ -140,5 +139,3 @@ def updateShow(request, show_id, methods = 'POST'):
 #         messages.success(request, "Blog successfully updated")
 #         # redirect to a success route
 #         return redirect('/blogs')
-
-
